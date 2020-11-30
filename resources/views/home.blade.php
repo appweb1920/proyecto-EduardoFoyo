@@ -1,23 +1,17 @@
-@extends('layouts.app')
+@extends('layout')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
+<div class="col-md-4 m-5">
+    <div class="card border border-primary">
+        <div class="card-header">
+            <strong class="card-title">Usuarios</strong>
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                Te permitirá agregar usuarios, manipular los datos y generar ordenes de pago.
+            </p>
         </div>
     </div>
 </div>
+
 @endsection

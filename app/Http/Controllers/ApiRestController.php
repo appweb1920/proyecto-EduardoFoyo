@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use Yajra\Datatables\Datatables;
+
 use Validator;
 use App\UserLove;
 
@@ -16,8 +18,8 @@ class ApiRestController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'password' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'gender' => 'required|int|max:1',
+            'confirmPassword' => 'required|string|max:255',
+            'gender' => 'required|string|max:1',
         ])->validate();
 
         $user = new UserLove();
@@ -39,7 +41,7 @@ class ApiRestController extends Controller
         $user->password = bcrypt($request['password']);
         $user->description = "Agregar Descripcion";
         $user->user_photo = "img";
-        $user->gender = ($request['gender'] == 0) ? 'm' : 'f';
+        $user->gender = $request['gender'];
 
         if ($user->save()) {
             return response()->json("Agregado", 200);
@@ -76,6 +78,11 @@ class ApiRestController extends Controller
                 "success" => false,
                 "message" => "Tu email no existe en nuestro registro"
             ), 200);
+    }
+
+    public function listUsers(Request $request)
+    {
+        return Datatables::of(UserLove::all())->toJson();
     }
 }
 

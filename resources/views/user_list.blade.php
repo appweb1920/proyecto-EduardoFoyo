@@ -2,41 +2,26 @@
 
 
 @section('content')
-<div class="card">
+<div class="card m-5">
     <div class="card-header">
-        <strong>Multiples</strong> Orden
+        <strong>Usuarios</strong>
     </div>
-    
     <div class="card-body card-block">
         <div class="table-responsive table--no-card m-b-30">
-            <table id="table_id" class="table table-borderless display table-striped table-earning">
+            
+            <table id="table_id" class="display"  style="width:100%">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>Id</th>
                         <th>Nombre</th>
-                        <th>Apellido</th>
                         <th>Email</th>
-                        <th>Telefono</th>
+                        <th>Genero</th>
+                        <th>Descripcion</th>
                     </tr>
                 </thead>
-               
+                <tbody>
+                </tbody>
             </table>
-        </div>
-    </div>
-    <div class="mt-3 token">
-        <div class="row no-gutters">
-            <div class="ml-5 col-7">
-                <div class="monto row mb-3">
-                    <input type="text" class="form-control col-sm-6" id="monto" placeholder="Ingresa el monto...">
-                    <button type="submit" id="create_order" class="generate ml-5 btn btn-primary" >
-                        Generar Orden
-                        <div class="spinner-border spinner-border-sm load" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </button>
-                    
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -44,5 +29,46 @@
 @endsection
 
 @push('scripts')
-
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+<script>
+    $(function() {
+        table = $('#table_id').DataTable({
+            lengthMenu: [[10, 50, 300], [10, 50, 300]],
+            dom: 'Blfrtip',
+            buttons: [
+                 'csv', 'excel', 'pdf'
+            ],
+            processing: true,
+            serverSide: true,
+            responsive: false,  
+            searching: true,
+            ajax: {
+               "url": '{!! route('list_user_api') !!}',
+               "type": 'POST',
+            },
+            columns:[
+                { 
+                    data: 'id',
+                    "render": function(data, type, row, meta){
+                        if(type === 'display'){
+                            var url = "{{route('modify_user', ':data')}}";
+                            url = url.replace(':data', data);
+                            return '<a href="' + url +'">' + data + '</a>';
+                        }
+                        return data;
+                    }
+                },
+                {data: 'name'},
+                {data: 'email'},
+                {data: 'gender'},
+                {data: 'description'},
+                
+            ],
+            order: [[ 0, "desc" ]],
+            
+        });
+        table.buttons().container()
+        .insertBefore( '#example_filter' );
+    });
+</script>
 @endpush

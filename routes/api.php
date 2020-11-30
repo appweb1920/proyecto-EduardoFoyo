@@ -21,3 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/create/love/user', 'ApiRestController@createLoveUser')->name('create_love_user');
 Route::post('/login/love/user', 'ApiRestController@loginLoveUser')->name('login_love_user');
+
+Route::post('/list/users', 'ApiRestController@listUsers')->name('list_user_api');

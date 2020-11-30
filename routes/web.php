@@ -19,5 +19,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'LoveController@index')->name('home');
 Route::get('/layout', 'LoveController@layout')->name('layout');
+Route::get('/lista/usuarios', 'LoveController@showUsers')->name('show_users');
+Route::get('/modifica/usuario/{id}', 'LoveController@modifyUser')->name('modify_user');
