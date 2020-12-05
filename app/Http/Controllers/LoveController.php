@@ -8,7 +8,6 @@ class LoveController extends Controller
 {
     public function index(Request $request)
     {
-        dd("Hola como estas");
         return view('home');
     }
 

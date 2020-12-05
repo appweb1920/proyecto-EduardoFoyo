@@ -4,11 +4,11 @@
 <div class="col-md-4 m-5">
     <div class="card border border-primary">
         <div class="card-header">
-            <strong class="card-title">Usuarios</strong>
+            <strong class="card-title">Lista Usuarios</strong>
         </div>
         <div class="card-body">
             <p class="card-text">
-                Te permitirá agregar usuarios, manipular los datos y generar ordenes de pago.
+                Permite visualizar en una lista dinamica todos los usuarios regristrados en la plicacion de Love
             </p>
         </div>
     </div>

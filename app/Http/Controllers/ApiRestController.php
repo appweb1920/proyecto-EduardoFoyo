@@ -36,7 +36,9 @@ class ApiRestController extends Controller
         $user->email = $request['email'];
 
         if ($request['password'] !== $request['confirmPassword'])
-            return response()->json("Las contraseñas tienen que ser iguales", 200);
+            return response()->json(array(
+                        "message" =>"Las contraseñas tienen que ser iguales",
+                    ), 200);
 
         $user->password = bcrypt($request['password']);
         $user->description = "Agregar Descripcion";
@@ -44,9 +46,13 @@ class ApiRestController extends Controller
         $user->gender = $request['gender'];
 
         if ($user->save()) {
-            return response()->json("Agregado", 200);
+            return response()->json(array(
+                        "message" => "Agregado",
+                    ), 200);
         }else{
-            return response()->json("Error al entrar en tu cuenta, revisa tus credenciales", 200);
+            return response()->json(array(
+                        "message" =>"Error al entrar en tu cuenta, revisa tus credenciales",
+                    ), 200);
         }
     }
 
@@ -64,7 +70,7 @@ class ApiRestController extends Controller
                     array(
                         "success" => true,
                         "message" => "Login",
-                        "user" => $user
+                        "user_token" => $user->user_token
                     ), 200);
             }
             return response()->json(
