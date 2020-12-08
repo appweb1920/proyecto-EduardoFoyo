@@ -19,7 +19,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'LoveController@index')->name('home');
-Route::get('/layout', 'LoveController@layout')->name('layout');
-Route::get('/lista/usuarios', 'LoveController@showUsers')->name('show_users');
-Route::get('/modifica/usuario/{id}', 'LoveController@modifyUser')->name('modify_user');
+Route::group(['middleware'=>['auth']], function(){
+    Route::get('/home', 'LoveController@index')->name('home');
+    Route::get('/layout', 'LoveController@layout')->name('layout');
+    Route::get('/lista/usuarios', 'LoveController@showUsers')->name('show_users');
+    Route::get('/modifica/usuario/{id}', 'LoveController@modifyUser')->name('modify_user');
+    Route::post('/editar/datos/usuario', 'LoveController@editUserData')->name('edit_user_data');
+});

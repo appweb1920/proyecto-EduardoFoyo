@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 
 use Validator;
@@ -89,6 +89,16 @@ class ApiRestController extends Controller
     public function listUsers(Request $request)
     {
         return Datatables::of(UserLove::all())->toJson();
+    }
+
+    public function usersRecommended(Request $request)
+    {
+        $user = UserLove::where('user_token', $request['token'])->first();
+        $users = DB::select('select * from user_love where gender != :gender and id != :id', ['gender'=>$user->gender,'id' => $user->id]);
+        return response()->json(array(
+                    "success" => true,
+                    "users" => $users
+                ), 200);
     }
 }
 

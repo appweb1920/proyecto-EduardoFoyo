@@ -23,3 +23,4 @@ Route::post('/create/love/user', 'ApiRestController@createLoveUser')->name('crea
 Route::post('/login/love/user', 'ApiRestController@loginLoveUser')->name('login_love_user');
 
 Route::post('/list/users', 'ApiRestController@listUsers')->name('list_user_api');
+Route::post('/users/recommended', 'ApiRestController@usersRecommended')->name('users_recommended');
