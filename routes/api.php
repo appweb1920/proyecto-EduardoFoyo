@@ -18,9 +18,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::post('/create/love/user', 'ApiRestController@createLoveUser')->name('create_love_user');
 Route::post('/login/love/user', 'ApiRestController@loginLoveUser')->name('login_love_user');
 
 Route::post('/list/users', 'ApiRestController@listUsers')->name('list_user_api');
 Route::post('/users/recommended', 'ApiRestController@usersRecommended')->name('users_recommended');
+
+Route::post('/get/user', 'ApiRestController@getUser')->name('get_user');
+Route::post('/edit/user/data', 'ApiRestController@editUserData')->name('edit_user_data');

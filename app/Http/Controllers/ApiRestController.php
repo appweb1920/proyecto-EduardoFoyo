@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
+use App\Http\Controllers\Controller;
 
 use Validator;
 use App\UserLove;
@@ -99,6 +100,36 @@ class ApiRestController extends Controller
                     "success" => true,
                     "users" => $users
                 ), 200);
+    }
+
+    public function getUser(Request $request)
+    {
+        $user = UserLove::where('user_token', $request['token'])->first();
+        return response()->json(array(
+                    "success" => true,
+                    "user" => $user
+                ), 200);
+    }
+
+    public function editUserData(Request $request)
+    {
+        $user = UserLove::where("id",$request['id'])->firstOrFail();
+        
+        $user->name = $request['name'];
+        $user->email = $request['email'];
+        $user->description = $request['description'];
+        $user->gender = $request['gender'];
+        
+        $path = $request->file('image')->store('images');
+        $user->user_photo = $path;
+        
+        $user->save();
+
+        return response()->json(array(
+            "success" => true,
+            "message" => "Actualizado"
+        ), 200);
+
     }
 }
 
