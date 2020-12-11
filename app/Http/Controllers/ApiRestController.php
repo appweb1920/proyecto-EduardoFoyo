@@ -10,6 +10,9 @@ use App\Http\Controllers\Controller;
 
 use Validator;
 use App\UserLove;
+use App\Like;
+use App\Interest;
+use App\UserInterest;
 
 class ApiRestController extends Controller
 {
@@ -92,10 +95,22 @@ class ApiRestController extends Controller
         return Datatables::of(UserLove::all())->toJson();
     }
 
+    public function getUserMatches(Request $request)
+    {
+        $user = UserLove::where('user_token', $request['token'])->first();
+        $matches =  MatchUsers::where('user_love_first', $user->id)->orWhere('user_love_second', $user->id)->get();
+        return response()->json(array(
+                    "success" => true,
+                    "matches" => $matches
+                ), 200);
+    }
+
     public function usersRecommended(Request $request)
     {
         $user = UserLove::where('user_token', $request['token'])->first();
-        $users = DB::select('select * from user_love where gender != :gender and id != :id', ['gender'=>$user->gender,'id' => $user->id]);
+        $user_interest = UserInterest::where("user_love_id",$user->id)->firstOrFail();
+        $interest = Interest::where("id",$user_interest->interest_id)->firstOrFail();
+        $users = DB::select('select * from user_love where gender !gender= : and id != :id and id_interest == :interest', ['gender'=>$user->gender,'id' => $user->id, "interest",$user->id_interest]);
         return response()->json(array(
                     "success" => true,
                     "users" => $users
@@ -120,8 +135,17 @@ class ApiRestController extends Controller
         $user->description = $request['description'];
         $user->gender = $request['gender'];
         
-        $path = $request->file('image')->store('images');
-        $user->user_photo = $path;
+        //$path = $request->file('image')->store('images');
+
+        if ($request->hasFile('image')){
+            $file = $request->file("image");
+            $nombrearchivo  = $file->getClientOriginalName();
+            $file->move(public_path("img/usuarios/"),$nombrearchivo);
+           // $user->user_photo= "img/usuarios/".$nombrearchivo;
+            $user->user_photo = $nombrearchivo;
+        }else{
+            $user->user_photo= "img/productos/default.jpg";
+        }
         
         $user->save();
 
@@ -130,6 +154,48 @@ class ApiRestController extends Controller
             "message" => "Actualizado"
         ), 200);
 
+    }
+
+    public function like(Request $request)
+    {
+        $user_love_like = UserLove::where('user_token', $request['token'])->first();
+        $user_love_liked = UserLove::where('id', $request['id_liked'])->first();
+
+        if (Like::where("user_love_like",$user_love_liked->id)->where('user_love_liked',$user_love_like->id)->firstOrFail() === null) {
+            $like = new Like();
+            $like->user_love_like = $user_love_like->id;
+            $like->user_love_liked = $user_love_liked->id;
+            $like->save();
+        }else{
+            $matchUsers = new MatchUsers();
+            $matchUsers->user_love_first = $user_love_like->id;
+            $matchUsers->user_love_second = $user_love_liked->id;
+            $matchUsers->save();
+        }
+        return response()->json(array(
+            "success" => true,
+        ), 200);
+
+    }
+
+    public function relateUserInterests(Request $request)
+    {
+        $user = UserLove::where('user_token', $request['token'])->first();
+        $user->id_interest = $request['id_interest'];
+
+        return response()->json(array(
+            "success" => true,
+        ), 200);
+    }
+
+    public function getInterest(Request $request)
+    {
+        $interest = Interest::all();
+
+        return response()->json(array(
+            "success" => true,
+            "interests" => $interest
+        ), 200);
     }
 }
 

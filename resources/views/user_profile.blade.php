@@ -102,11 +102,15 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
 }
 
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
 @endpush
 
 @section('content')
 <div class="container">
     <div class="container light-style flex-grow-1 container-p-y">
+        <button id="delete_user" class="btn btn-danger mt-3" style="margin-left:95%">
+            <i class="fas fa-trash-alt"></i>
+        </button>
         <form action="{{route('edit_user_data')}}" method="post">
         @csrf
             <input type="hidden" name="id" value="{{$user->id}}">
@@ -126,9 +130,8 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                 <div class="col-md-9">
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="account-general">
-
                         <div class="card-body media align-items-center">
-                            <img src="{{$user->user_photo}}" alt="" class="d-block ui-w-80">
+                            <img src="{{ asset('img/usuarios')}}/{{$user->user_photo}}.jpg" alt="" class="d-block ui-w-80">
                         </div>
                         <hr class="border-light m-0">
                         <div class="card-body">
@@ -202,10 +205,20 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
             </div>
         </form>
+                
     </div>
 </div>
 @endsection
 
 @push('scripts')
-
+<script>
+$( document ).ready(function() {
+    $("#delete_user").click(function () {
+        var txt;
+        if (confirm("¿Estas seguro de que quieres Eliminar?")) {
+            window.location.href = "{{route('delete_user',$user->id)}}";
+        }
+    });
+});
+</script>
 @endpush

@@ -16,7 +16,7 @@ class UserLove extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id','user_token', 'name','email','password',
+        'id','user_token','id_interest','name','email','password',
         'gender','description', 'user_photo'
     ];
 }

@@ -95,6 +95,9 @@
       <div class=" rounded p-2 list-group list-group-flush">
         <a href="{{route('show_users')}}" class="list-group-item list-group-item-action bg-light">Lista Usuarios</a>
       </div>
+      <div class=" rounded p-2 list-group list-group-flush">
+        <a href="{{route('add_interest_view')}}" class="list-group-item list-group-item-action bg-light">Agregar intereses</a>
+      </div>
     </div>
     <!-- /#sidebar-wrapper -->
 

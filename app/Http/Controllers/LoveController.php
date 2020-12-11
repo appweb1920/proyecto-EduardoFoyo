@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\UserLove;
+use App\Interest;
 
 class LoveController extends Controller
 {
@@ -17,10 +18,15 @@ class LoveController extends Controller
     {
         return view('layout');
     }
-    
+
     public function showUsers(Request $request)
     {
         return view('user_list');
+    }
+
+    public function addInterestView(Request $request)
+    {
+        return view('add_interest');
     }
 
     public function modifyUser(Request $request,$id)
@@ -48,5 +54,19 @@ class LoveController extends Controller
                 return back()->withErrors("Las contraseñas no coinciden");
             }
         }
+    }
+
+    public function addInterest(Request $request)
+    {
+        $interest = new Interest();
+        $interest->interest = $request['interest'];
+        $interest->save();
+        return redirect()->back();
+    }
+    
+    public function deleteUser(Request $request,$id)
+    {
+        UserLove::where('id',$id)->firstOrFail()->delete();
+        return view('user_list');
     }
 }

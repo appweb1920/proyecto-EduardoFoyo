@@ -25,4 +25,7 @@ Route::group(['middleware'=>['auth']], function(){
     Route::get('/lista/usuarios', 'LoveController@showUsers')->name('show_users');
     Route::get('/modifica/usuario/{id}', 'LoveController@modifyUser')->name('modify_user');
     Route::post('/editar/datos/usuario', 'LoveController@editUserData')->name('edit_user_data');
+    Route::get('/add/interests/view', 'LoveController@addInterestView')->name('add_interest_view');
+    Route::post('/add/interests', 'LoveController@addInterest')->name('add_interest');
+    Route::get('/delete/user/{id}', 'LoveController@deleteUser')->name('delete_user');
 });

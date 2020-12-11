@@ -26,3 +26,5 @@ Route::post('/users/recommended', 'ApiRestController@usersRecommended')->name('u
 
 Route::post('/get/user', 'ApiRestController@getUser')->name('get_user');
 Route::post('/edit/user/data', 'ApiRestController@editUserData')->name('edit_user_data');
+
+Route::get('/get/interest', 'ApiRestController@getInterest')->name('get_interest');
