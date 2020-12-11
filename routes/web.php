@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//La bese de datos esta conectada con aws, no tiene la configuracion en el .env, la configuracion esta database.php
+
 Route::get('/', function () {
     return view('welcome');
 });
