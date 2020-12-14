@@ -15,7 +15,7 @@ class UserLove extends Migration
     {
         Schema::create('user_love', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->int('id_interest');
+            $table->integer('id_interest');
             $table->string('user_token');
             $table->string('name');
             $table->string('email')->unique();
