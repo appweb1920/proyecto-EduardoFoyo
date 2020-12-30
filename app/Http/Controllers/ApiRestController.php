@@ -47,6 +47,7 @@ class ApiRestController extends Controller
         $user->password = bcrypt($request['password']);
         $user->description = "Agregar Descripcion";
         $user->user_photo = "img";
+        $user->id_interest = 0;
         $user->gender = $request['gender'];
 
         if ($user->save()) {
@@ -182,6 +183,7 @@ class ApiRestController extends Controller
     {
         $user = UserLove::where('user_token', $request['token'])->first();
         $user->id_interest = $request['id_interest'];
+        $user->save();
 
         return response()->json(array(
             "success" => true,
