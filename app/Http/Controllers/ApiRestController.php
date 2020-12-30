@@ -109,9 +109,14 @@ class ApiRestController extends Controller
     public function usersRecommended(Request $request)
     {
         $user = UserLove::where('user_token', $request['token'])->first();
-        $user_interest = UserInterest::where("user_love_id",$user->id)->firstOrFail();
-        $interest = Interest::where("id",$user_interest->interest_id)->firstOrFail();
-        $users = DB::select('select * from user_love where gender !gender= : and id != :id and id_interest == :interest', ['gender'=>$user->gender,'id' => $user->id, "interest",$user->id_interest]);
+        $users = [];
+        if ($user->id_interest == 0) {
+            $users = DB::select('select * from user_love where gender != :gender and id != :id', ['gender'=>$user->gender,'id' => $user->id]);
+        }else{
+            $user_interest = UserInterest::where("user_love_id",$user->id)->firstOrFail();
+            $interest = Interest::where("id",$user_interest->interest_id)->firstOrFail();
+            $users = DB::select('select * from user_love where gender != :gender and id != :id and id_interest == :interest', ['gender'=>$user->gender,'id' => $user->id, "interest",$user->id_interest]);
+        }
         return response()->json(array(
                     "success" => true,
                     "users" => $users
