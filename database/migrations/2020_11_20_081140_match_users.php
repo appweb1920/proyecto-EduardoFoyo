@@ -15,10 +15,12 @@ class MatchUsers extends Migration
     {
         Schema::create('match_users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->index('user_love_first');
-            $table->foreign('user_love_first')->references('id')->on('user_love')->onDelete('cascade');
-            $table->index('user_love_second');
-            $table->foreign('user_love_second')->references('id')->on('user_love')->onDelete('cascade');
+            $table->integer('user_love_first');
+            $table->integer('user_love_second');
+            // $table->index('user_love_first');
+            // $table->foreign('user_love_first')->references('id')->on('user_love')->onDelete('cascade');
+            // $table->index('user_love_second');
+            // $table->foreign('user_love_second')->references('id')->on('user_love')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

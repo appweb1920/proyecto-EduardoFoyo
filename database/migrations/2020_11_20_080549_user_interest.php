@@ -13,7 +13,7 @@ class UserInterest extends Migration
      */
     public function up()
     {
-        Schema::create('user_interest', function (Blueprint $table) {
+        /*Schema::create('user_interest', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->index('user_love_id');
             $table->foreign('user_love_id')->references('id')->on('user_love')->onDelete('cascade');
@@ -21,7 +21,7 @@ class UserInterest extends Migration
             $table->foreign('interest_id')->references('id')->on('interest')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
-        });
+        });*/
     }
 
     /**

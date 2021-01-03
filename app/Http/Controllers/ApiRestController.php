@@ -13,6 +13,7 @@ use App\UserLove;
 use App\Like;
 use App\Interest;
 use App\UserInterest;
+use App\MatchUsers;
 
 class ApiRestController extends Controller
 {
@@ -167,7 +168,7 @@ class ApiRestController extends Controller
         $user_love_like = UserLove::where('user_token', $request['token'])->first();
         $user_love_liked = UserLove::where('id', $request['id_liked'])->first();
 
-        if (Like::where("user_love_like",$user_love_liked->id)->where('user_love_liked',$user_love_like->id)->firstOrFail() === null) {
+        if ( Like::where("user_love_like",$user_love_liked->id)->where('user_love_liked',$user_love_like->id)->first() === null) {
             $like = new Like();
             $like->user_love_like = $user_love_like->id;
             $like->user_love_liked = $user_love_liked->id;
@@ -180,6 +181,7 @@ class ApiRestController extends Controller
         }
         return response()->json(array(
             "success" => true,
+            "message" => "Hiciste Match"
         ), 200);
 
     }

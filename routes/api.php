@@ -29,5 +29,5 @@ Route::post('/edit/user/data', 'ApiRestController@editUserData')->name('edit_use
 
 Route::get('/relate/user/interests', 'ApiRestController@relateUserInterests')->name('relate_user_interests');
 Route::get('/get/interest', 'ApiRestController@getInterest')->name('get_interest');
-Route::get('/like', 'ApiRestController@like')->name('like');
+Route::post('/like', 'ApiRestController@like')->name('like');
 Route::get('/get/user/matches', 'ApiRestController@getUserMatches')->name('get_user_matches');

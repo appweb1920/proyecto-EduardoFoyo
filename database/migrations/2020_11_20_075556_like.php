@@ -15,10 +15,12 @@ class Like extends Migration
     {
         Schema::create('like', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->index('user_love_like');
+            $table->integer('user_love_like');
+            $table->integer('user_love_liked');
+           /* $table->index('user_love_like');
             $table->foreign('user_love_like')->references('id')->on('user_love')->onDelete('cascade');
             $table->index('user_love_liked');
-            $table->foreign('user_love_liked')->references('id')->on('user_love')->onDelete('cascade');
+            $table->foreign('user_love_liked')->references('id')->on('user_love')->onDelete('cascade');*/
             $table->softDeletes();
             $table->timestamps();
         });
