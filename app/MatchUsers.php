@@ -17,4 +17,13 @@ class MatchUsers extends Model
     protected $fillable = [
         'id','user_love_first','user_love_second'
     ];
+
+    public function user_love_first()
+    {
+        return $this->hasMany('App\UserLove', 'id', 'user_love_first');
+    }
+    public function user_love_second()
+    {
+        return $this->hasMany('App\UserLove', 'id', 'user_love_second');
+    }
 }

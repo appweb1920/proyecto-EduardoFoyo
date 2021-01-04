@@ -100,7 +100,10 @@ class ApiRestController extends Controller
     public function getUserMatches(Request $request)
     {
         $user = UserLove::where('user_token', $request['token'])->first();
-        $matches =  MatchUsers::where('user_love_first', $user->id)->orWhere('user_love_second', $user->id)->get();
+        //$matches =  MatchUsers::where('user_love_first', $user->id)->orWhere('user_love_second', $user->id)->get();
+
+        $matches = MatchUsers::with(['user_love_first','user_love_second'])->where('user_love_first', $user->id)->orWhere('user_love_second', $user->id)->get();
+        
         return response()->json(array(
                     "success" => true,
                     "matches" => $matches
@@ -112,11 +115,49 @@ class ApiRestController extends Controller
         $user = UserLove::where('user_token', $request['token'])->first();
         $users = [];
         if ($user->id_interest == 0) {
-            $users = DB::select('select * from user_love where gender != :gender and id != :id', ['gender'=>$user->gender,'id' => $user->id]);
+            //$users = DB::select('select * from user_love where gender != :gender and id != :id', ['gender'=>$user->gender,'id' => $user->id]);
+            $users = DB::select('SELECT 
+                                        love.user_love.id,
+                                        love.user_love.id_interest,
+                                        love.user_love.user_token,
+                                        love.user_love.name,
+                                        love.user_love.email,
+                                        love.user_love.gender,
+                                        love.user_love.description,
+                                        love.user_love.user_photo
+                                    FROM
+                                        love.user_love
+                                            LEFT JOIN
+                                        love.like ON love.like.user_love_liked = love.user_love.id
+                                    WHERE
+                                        love.like.user_love_like IS NULL
+                                            AND love.user_love.gender != :gender
+                                            AND love.user_love.id != :id'
+        ,['gender'=>$user->gender,'id' => $user->id]);
+
         }else{
             $user_interest = UserInterest::where("user_love_id",$user->id)->firstOrFail();
             $interest = Interest::where("id",$user_interest->interest_id)->firstOrFail();
-            $users = DB::select('select * from user_love where gender != :gender and id != :id and id_interest == :interest', ['gender'=>$user->gender,'id' => $user->id, "interest",$user->id_interest]);
+            //$users = DB::select('select * from user_love where gender != :gender and id != :id and id_interest == :interest', ['gender'=>$user->gender,'id' => $user->id, "interest",$user->id_interest]);
+            $users = DB::select('SELECT 
+                                        love.user_love.id,
+                                        love.user_love.id_interest,
+                                        love.user_love.user_token,
+                                        love.user_love.name,
+                                        love.user_love.email,
+                                        love.user_love.gender,
+                                        love.user_love.description,
+                                        love.user_love.user_photo
+                                    FROM
+                                        love.user_love
+                                            LEFT JOIN
+                                        love.like ON love.like.user_love_liked = love.user_love.id
+                                    WHERE
+                                        love.like.user_love_like IS NULL
+                                            AND love.user_love.gender != :gender
+                                            AND love.user_love.id != :id
+                                            AND love.user_love.id_interest'
+        ,['gender'=>$user->gender,'id' => $user->id, "interest",$user->id_interest]);
         }
         return response()->json(array(
                     "success" => true,

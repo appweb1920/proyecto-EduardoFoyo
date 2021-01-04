@@ -25,9 +25,11 @@ Route::post('/list/users', 'ApiRestController@listUsers')->name('list_user_api')
 Route::post('/users/recommended', 'ApiRestController@usersRecommended')->name('users_recommended');
 
 Route::post('/get/user', 'ApiRestController@getUser')->name('get_user');
-Route::post('/edit/user/data', 'ApiRestController@editUserData')->name('edit_user_data');
+Route::post('/edit/user/data', 'ApiRestController@editUserData')->name('edit_user_data');///
 
-Route::get('/relate/user/interests', 'ApiRestController@relateUserInterests')->name('relate_user_interests');
-Route::get('/get/interest', 'ApiRestController@getInterest')->name('get_interest');
+Route::get('/relate/user/interests', 'ApiRestController@relateUserInterests')->name('relate_user_interests');///
+
+Route::get('/get/interest', 'ApiRestController@getInterest')->name('get_interest');///
+
 Route::post('/like', 'ApiRestController@like')->name('like');
-Route::get('/get/user/matches', 'ApiRestController@getUserMatches')->name('get_user_matches');
+Route::post('/get/user/matches', 'ApiRestController@getUserMatches')->name('get_user_matches');
