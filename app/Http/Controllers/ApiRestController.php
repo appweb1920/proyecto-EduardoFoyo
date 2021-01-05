@@ -136,8 +136,8 @@ class ApiRestController extends Controller
         ,['gender'=>$user->gender,'id' => $user->id]);
 
         }else{
-            $user_interest = UserInterest::where("user_love_id",$user->id)->firstOrFail();
-            $interest = Interest::where("id",$user_interest->interest_id)->firstOrFail();
+            $user = UserLove::where('user_token', $request['token'])->first();
+            $interest = Interest::where("id",$user->id_interest)->firstOrFail();
             //$users = DB::select('select * from user_love where gender != :gender and id != :id and id_interest == :interest', ['gender'=>$user->gender,'id' => $user->id, "interest",$user->id_interest]);
             $users = DB::select('SELECT 
                                         love.user_love.id,
@@ -156,8 +156,8 @@ class ApiRestController extends Controller
                                         love.like.user_love_like IS NULL
                                             AND love.user_love.gender != :gender
                                             AND love.user_love.id != :id
-                                            AND love.user_love.id_interest'
-        ,['gender'=>$user->gender,'id' => $user->id, "interest",$user->id_interest]);
+                                            AND love.user_love.id_interest = :interest'
+        ,['gender'=>$user->gender,'id' => $user->id, "interest"=>$user->id_interest]);
         }
         return response()->json(array(
                     "success" => true,
@@ -176,7 +176,7 @@ class ApiRestController extends Controller
 
     public function editUserData(Request $request)
     {
-        $user = UserLove::where("id",$request['id'])->firstOrFail();
+        $user = UserLove::where("user_token",$request['token'])->firstOrFail();
         
         $user->name = $request['name'];
         $user->email = $request['email'];
