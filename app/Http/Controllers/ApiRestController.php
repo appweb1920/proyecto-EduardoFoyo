@@ -116,47 +116,60 @@ class ApiRestController extends Controller
         $users = [];
         if ($user->id_interest == 0) {
             //$users = DB::select('select * from user_love where gender != :gender and id != :id', ['gender'=>$user->gender,'id' => $user->id]);
-            $users = DB::select('SELECT 
-                                        love.user_love.id,
-                                        love.user_love.id_interest,
-                                        love.user_love.user_token,
-                                        love.user_love.name,
-                                        love.user_love.email,
-                                        love.user_love.gender,
-                                        love.user_love.description,
-                                        love.user_love.user_photo
-                                    FROM
-                                        love.user_love
-                                            LEFT JOIN
-                                        love.like ON love.like.user_love_liked = love.user_love.id
-                                    WHERE
-                                        love.like.user_love_like IS NULL
-                                            AND love.user_love.gender != :gender
-                                            AND love.user_love.id != :id'
-        ,['gender'=>$user->gender,'id' => $user->id]);
-
+            if (Like::where('user_love_liked', $user->id)->first()) {
+               $users = DB::select('SELECT 
+                            u.id,
+                            u.id_interest,
+                            u.user_token,
+                            u.name,
+                            u.email,
+                            u.gender,
+                            u.description,
+                            u.user_photo
+                        FROM
+                            love.user_love u 
+                        WHERE
+                            u.id NOT IN 
+                                (SELECT l.user_love_liked FROM love.like l 
+                                WHERE l.user_love_like = '.$user->id.') AND
+                            u.id NOT IN 
+                                (SELECT m.user_love_second FROM love.match_users m 
+                                WHERE m.user_love_first = '.$user->id.') AND 
+                            u.id NOT IN 
+                                (SELECT m.user_love_first FROM love.match_users m 
+                                WHERE m.user_love_second = '.$user->id.') AND
+                            u.gender != "'.$user->gender.'" AND
+                            u.id != '.$user->id
+            ,['gender'=>$user->gender,'id' => $user->id]);
+            }
         }else{
             $user = UserLove::where('user_token', $request['token'])->first();
             $interest = Interest::where("id",$user->id_interest)->firstOrFail();
             //$users = DB::select('select * from user_love where gender != :gender and id != :id and id_interest == :interest', ['gender'=>$user->gender,'id' => $user->id, "interest",$user->id_interest]);
             $users = DB::select('SELECT 
-                                        love.user_love.id,
-                                        love.user_love.id_interest,
-                                        love.user_love.user_token,
-                                        love.user_love.name,
-                                        love.user_love.email,
-                                        love.user_love.gender,
-                                        love.user_love.description,
-                                        love.user_love.user_photo
-                                    FROM
-                                        love.user_love
-                                            LEFT JOIN
-                                        love.like ON love.like.user_love_liked = love.user_love.id
-                                    WHERE
-                                        love.like.user_love_like IS NULL
-                                            AND love.user_love.gender != :gender
-                                            AND love.user_love.id != :id
-                                            AND love.user_love.id_interest = :interest'
+                                        u.id,
+                            u.id_interest,
+                            u.user_token,
+                            u.name,
+                            u.email,
+                            u.gender,
+                            u.description,
+                            u.user_photo
+                        FROM
+                            love.user_love u 
+                        WHERE
+                            u.id NOT IN 
+                                (SELECT l.user_love_liked FROM love.like l 
+                                WHERE l.user_love_like = '.$user->id.') AND
+                            u.id NOT IN 
+                                (SELECT m.user_love_second FROM love.match_users m 
+                                WHERE m.user_love_first = '.$user->id.') AND 
+                            u.id NOT IN 
+                                (SELECT m.user_love_first FROM love.match_users m 
+                                WHERE m.user_love_second = '.$user->id.') AND
+                            u.gender != "'.$user->gender.'" AND
+                            u.id != '.$user->id.'
+                                            AND love.user_love.id_interest = '.$user->id_interest
         ,['gender'=>$user->gender,'id' => $user->id, "interest"=>$user->id_interest]);
         }
         return response()->json(array(
